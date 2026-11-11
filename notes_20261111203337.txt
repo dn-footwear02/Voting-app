@@ -1,10 +1,9 @@
-11.11 8:33 PM
 <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voter Parchi Generator (PDF Upload & 3x5 Grid)</title>
+    <title>Voter Parchi Generator (A4 - 3x5 Grid)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- PDF.js library for reading uploaded PDFs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
@@ -21,10 +20,6 @@
             .page-break {
                 page-break-after: always;
                 break-after: page;
-            }
-            .parchi-container {
-                box-shadow: none !important;
-                border: 1px dashed #000 !important;
             }
         }
 
@@ -129,16 +124,15 @@
                     for (let i = 1; i <= pdf.numPages; i++) {
                         const page = await pdf.getPage(i);
                         const textContent = await page.getTextContent();
-                        let pageText = textContent.items.map(item => item.str).join(" ");
+                        let textItems = textContent.items.map(item => item.str).join(" ");
                         
-                        // Yahan aap voter list ke standard format ke hisab se parsing logic likh sakte hain.
-                        // Demo ke taur par hum PDF ke text se dummy entries bana rahe hain agar data match na ho:
+                        // Demo data mapping per page for test
                         allVoters.push({
                             ward: "05",
                             part: "12",
                             serial: String(i),
                             voterId: "PDF_ID_" + i,
-                            name: "PDF Page " + i + " Voter",
+                            name: "Voter Page " + i,
                             father: "N/A",
                             house: "10",
                             polling: "मतदान केंद्र - कक्ष क्र. 1"
@@ -193,7 +187,7 @@
                     pageDiv.appendChild(card);
                 });
 
-                // Agar akhiri page par 15 se kam voters bachein, toh khali boxes dikhayein
+                // Fill empty slots if less than 15 on last page
                 while (pageDiv.children.length < pageSize) {
                     let emptyCard = document.createElement('div');
                     emptyCard.className = 'parchi-card opacity-20';
@@ -205,11 +199,10 @@
             }
         }
 
-        // Start me sample load kar dein
+        // Auto load sample on start
         window.onload = function() {
             loadSampleData();
         };
     </script>
 </body>
 </html>
-
